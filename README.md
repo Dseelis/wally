@@ -25,3 +25,10 @@ The easiest way to install Wally is using the official installer:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Dseelis/wally/master/install.sh | sh
+```
+
+### Roadmap
+ - Better random mode
+ - More wallpaper sources
+ - Image metadata
+ - AUR
