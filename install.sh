@@ -2,7 +2,7 @@
 set -eu
 
 # Change this to your GitHub repository: owner/repository
-REPO="${WALLY_REPO:-YOUR_USERNAME/wally}"
+REPO="${WALLY_REPO:-Dseelis/wally}"
 VERSION="${WALLY_VERSION:-latest}"
 INSTALL_DIR="${WALLY_INSTALL_DIR:-$HOME/.local/bin}"
 
