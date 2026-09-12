@@ -32,3 +32,4 @@ curl -fsSL https://raw.githubusercontent.com/Dseelis/wally/master/install.sh | s
  - More wallpaper sources
  - Image metadata
  - AUR
+ - wally update
