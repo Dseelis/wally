@@ -19,11 +19,6 @@ pub struct HistoryEntry {
 }
 
 
-/*
- * ─────────────────────────────────────
- * HISTORY FILE
- * ─────────────────────────────────────
- */
 
 pub fn history_path() -> Option<PathBuf> {
     let data_dir = dirs::data_dir()?;
@@ -36,11 +31,6 @@ pub fn history_path() -> Option<PathBuf> {
 }
 
 
-/*
- * ─────────────────────────────────────
- * SOURCE
- * ─────────────────────────────────────
- */
 
 fn source_from_wallpaper(
     wallpaper: &Wallpaper,
@@ -64,11 +54,6 @@ fn source_from_wallpaper(
 }
 
 
-/*
- * ─────────────────────────────────────
- * LOAD
- * ─────────────────────────────────────
- */
 
 pub fn load() -> Vec<HistoryEntry> {
     let Some(path) = history_path() else {
@@ -86,13 +71,6 @@ pub fn load() -> Vec<HistoryEntry> {
             .unwrap_or_default();
 
 
-    /*
-     * Поддержка старого history.json.
-     *
-     * Старые записи не имели source.
-     * Для Wallhaven определяем его
-     * по сохранённому URL.
-     */
 
     for entry in &mut entries {
         if entry.source.is_empty() {
@@ -115,12 +93,6 @@ pub fn load() -> Vec<HistoryEntry> {
     entries
 }
 
-
-/*
- * ─────────────────────────────────────
- * WRITE
- * ─────────────────────────────────────
- */
 
 fn write_history(
     entries: &[HistoryEntry],
@@ -160,11 +132,6 @@ fn write_history(
 }
 
 
-/*
- * ─────────────────────────────────────
- * ADD
- * ─────────────────────────────────────
- */
 
 pub fn add(
     wallpaper: &Wallpaper,
@@ -177,21 +144,6 @@ pub fn add(
     let mut entries =
         load();
 
-
-    /*
-     * Удаляем только запись этого
-     * конкретного источника.
-     *
-     * Поэтому:
-     *
-     * wallhaven:123
-     *
-     * и
-     *
-     * konachan:123
-     *
-     * могут существовать одновременно.
-     */
 
     entries.retain(|entry| {
         !(entry.id == wallpaper.id
@@ -235,11 +187,6 @@ pub fn add(
 }
 
 
-/*
- * ─────────────────────────────────────
- * CONTAINS
- * ─────────────────────────────────────
- */
 
 pub fn contains(
     wallpaper: &Wallpaper,
@@ -257,11 +204,6 @@ pub fn contains(
 }
 
 
-/*
- * ─────────────────────────────────────
- * REMOVE
- * ─────────────────────────────────────
- */
 
 pub fn remove(
     id: &str,
@@ -279,11 +221,6 @@ pub fn remove(
 }
 
 
-/*
- * ─────────────────────────────────────
- * CLEAR
- * ─────────────────────────────────────
- */
 
 pub fn clear() -> Result<()> {
     write_history(&[])

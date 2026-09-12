@@ -98,11 +98,6 @@ impl std::fmt::Display for Resolution {
 }
 
 
-/*
- * ─────────────────────────────────────
- * SETUP
- * ─────────────────────────────────────
- */
 
 pub fn setup() -> WallyConfig {
 
@@ -127,21 +122,11 @@ pub fn setup() -> WallyConfig {
     println!();
 
 
-    /*
-     * ─────────────────────────────────
-     * DIRECTORY
-     * ─────────────────────────────────
-     */
 
     let directory =
         select_directory();
 
 
-    /*
-     * ─────────────────────────────────
-     * SOURCE
-     * ─────────────────────────────────
-     */
 
     let sources = [
         "Wallhaven",
@@ -169,11 +154,7 @@ pub fn setup() -> WallyConfig {
         };
 
 
-    /*
-     * ─────────────────────────────────
-     * RATING
-     * ─────────────────────────────────
-     */
+
 
     let ratings = [
         "SFW",
@@ -201,11 +182,6 @@ pub fn setup() -> WallyConfig {
         };
 
 
-    /*
-     * ─────────────────────────────────
-     * RESOLUTION
-     * ─────────────────────────────────
-     */
 
     let resolutions = [
         "1920x1080",
@@ -291,11 +267,6 @@ pub fn setup() -> WallyConfig {
         };
 
 
-    /*
-     * ─────────────────────────────────
-     * TAGS
-     * ─────────────────────────────────
-     */
 
     let tags: String =
         Input::new()
@@ -309,11 +280,6 @@ pub fn setup() -> WallyConfig {
             );
 
 
-    /*
-     * ─────────────────────────────────
-     * AMOUNT
-     * ─────────────────────────────────
-     */
 
     let amount: u32 =
         Input::new()
@@ -349,22 +315,12 @@ pub fn setup() -> WallyConfig {
 }
 
 
-/*
- * ─────────────────────────────────────
- * DIRECTORY SELECTOR
- * ─────────────────────────────────────
- */
 
 fn select_directory() -> String {
 
     let saved =
         locations::load();
 
-
-    /*
-     * Если сохранённых мест нет —
-     * сразу предлагаем ввести путь.
-     */
 
     if saved.is_empty() {
 
@@ -392,10 +348,6 @@ fn select_directory() -> String {
     }
 
 
-    /*
-     * Добавляем специальный пункт
-     * для создания нового местоположения.
-     */
 
     let mut options =
         saved.clone();
@@ -419,9 +371,6 @@ fn select_directory() -> String {
             );
 
 
-    /*
-     * Выбрано существующее место.
-     */
 
     if index < saved.len() {
 
@@ -430,9 +379,6 @@ fn select_directory() -> String {
     }
 
 
-    /*
-     * Создаём новое место.
-     */
 
     let directory: String =
         Input::new()
@@ -458,11 +404,6 @@ fn select_directory() -> String {
 }
 
 
-/*
- * ─────────────────────────────────────
- * SAVE LOCATION
- * ─────────────────────────────────────
- */
 
 fn save_if_requested(
     directory: &str,
@@ -492,11 +433,6 @@ fn save_if_requested(
 }
 
 
-/*
- * ─────────────────────────────────────
- * RESOLUTION PARSER
- * ─────────────────────────────────────
- */
 
 fn parse_resolution(
     value: &str,

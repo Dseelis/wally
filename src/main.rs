@@ -68,11 +68,6 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-/*
- * ─────────────────────────────────────
- * SEARCH
- * ─────────────────────────────────────
- */
 
 async fn run_search() -> Result<()> {
     let config = cli::setup();
@@ -179,11 +174,6 @@ async fn run_search() -> Result<()> {
     Ok(())
 }
 
-/*
- * ─────────────────────────────────────
- * RANDOM
- * ─────────────────────────────────────
- */
 
 async fn run_random() -> Result<()> {
     let mut random_config = cli::setup();
@@ -196,11 +186,6 @@ async fn run_random() -> Result<()> {
     Ok(())
 }
 
-/*
- * ─────────────────────────────────────
- * BOTH SOURCES
- * ─────────────────────────────────────
- */
 
 pub async fn search_both(
     config: &cli::WallyConfig,
@@ -216,11 +201,6 @@ pub async fn search_both(
     let requested =
         config.amount;
 
-
-    /*
-     * Делим количество примерно
-     * пополам между источниками.
-     */
 
     let wallhaven_amount =
         if requested <= 1 {
@@ -240,12 +220,6 @@ pub async fn search_both(
     let mut results =
         Vec::new();
 
-
-    /*
-     * ─────────────────────────────
-     * WALLHAVEN
-     * ─────────────────────────────
-     */
 
     if wallhaven_amount > 0 {
 
@@ -283,11 +257,6 @@ pub async fn search_both(
     }
 
 
-    /*
-     * ─────────────────────────────
-     * KONACHAN
-     * ─────────────────────────────
-     */
 
     if konachan_amount > 0 {
 
@@ -325,9 +294,6 @@ pub async fn search_both(
     }
 
 
-    /*
-     * Ограничиваем итоговое количество.
-     */
 
     results.truncate(
         requested as usize
@@ -352,12 +318,6 @@ pub async fn search_both(
 
     Ok(results)
 }
-
-/*
- * ─────────────────────────────────────
- * CONFIG CLONE
- * ─────────────────────────────────────
- */
 
 fn clone_config_with_amount(
     config: &cli::WallyConfig,
@@ -384,11 +344,6 @@ fn clone_config_with_amount(
     }
 }
 
-/*
- * ─────────────────────────────────────
- * HISTORY
- * ─────────────────────────────────────
- */
 
 fn run_history(
     action: Option<HistoryAction>,
@@ -413,11 +368,6 @@ fn run_history(
     Ok(())
 }
 
-/*
- * ─────────────────────────────────────
- * SHOW HISTORY
- * ─────────────────────────────────────
- */
 
 fn show_history() {
     let entries =
@@ -491,11 +441,6 @@ fn show_history() {
     }
 }
 
-/*
- * ─────────────────────────────────────
- * CLEAR HISTORY
- * ─────────────────────────────────────
- */
 
 fn clear_history() -> Result<()> {
     let entries =
@@ -529,11 +474,7 @@ fn clear_history() -> Result<()> {
     Ok(())
 }
 
-/*
- * ─────────────────────────────────────
- * REMOVE HISTORY ENTRY
- * ─────────────────────────────────────
- */
+
 
 fn remove_history(
     id: &str,
@@ -563,10 +504,6 @@ fn remove_history(
     }
 
 
-    /*
-     * Если ID существует только один раз,
-     * удаляем сразу.
-     */
 
     if matches.len() == 1 {
 
@@ -582,11 +519,6 @@ fn remove_history(
         return Ok(());
     }
 
-
-    /*
-     * Теоретически одинаковый ID может
-     * существовать у разных источников.
-     */
 
     println!(
         "⚠ Multiple sources contain ID '{}'.",

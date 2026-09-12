@@ -79,11 +79,6 @@ impl App {
     }
 
 
-    /*
-     * ─────────────────────────────
-     * NAVIGATION
-     * ─────────────────────────────
-     */
 
     fn next(&mut self) {
 
@@ -116,11 +111,6 @@ impl App {
     }
 
 
-    /*
-     * ─────────────────────────────
-     * SELECTION
-     * ─────────────────────────────
-     */
 
     fn toggle_selected(&mut self) {
 
@@ -145,11 +135,6 @@ impl App {
     }
 
 
-    /*
-     * ─────────────────────────────
-     * CURRENT WALLPAPER
-     * ─────────────────────────────
-     */
 
     fn current_wallpaper(
         &self,
@@ -161,20 +146,13 @@ impl App {
     }
 
 
-    /*
-     * ─────────────────────────────
-     * DOWNLOAD TARGETS
-     * ─────────────────────────────
-     */
+
 
     fn download_targets(
         &self,
     ) -> Vec<&Wallpaper> {
 
-        /*
-         * Если ничего не выбрано,
-         * скачиваем текущие обои.
-         */
+
 
         if self.selected_count() == 0 {
 
@@ -186,10 +164,6 @@ impl App {
         }
 
 
-        /*
-         * Если есть выбранные —
-         * скачиваем только их.
-         */
 
         self.wallpapers
             .iter()
@@ -215,11 +189,6 @@ impl App {
 }
 
 
-/*
- * ─────────────────────────────────────
- * START
- * ─────────────────────────────────────
- */
 
 pub async fn run_random(
     config: WallyConfig,
@@ -270,11 +239,6 @@ pub async fn run_random(
 }
 
 
-/*
- * ─────────────────────────────────────
- * RANDOM MAIN LOOP
- * ─────────────────────────────────────
- */
 
 async fn run_random_app(
     terminal:
@@ -288,10 +252,7 @@ async fn run_random_app(
     let mut images: Vec<StatefulProtocol> = Vec::new();
 
     loop {
-        /*
-         * Получаем одну новую картинку
-         * при каждом запросе.
-         */
+
         let wallpaper =
             fetch_random_wallpaper(&config).await?;
 
@@ -318,10 +279,6 @@ async fn run_random_app(
         wallpapers.push(wallpaper);
         images.push(protocol);
 
-        /*
-         * Показываем текущую случайную картинку
-         * и ждём действия пользователя.
-         */
         loop {
             terminal.draw(|frame| {
                 let area = frame.area();
@@ -438,13 +395,6 @@ async fn run_random_app(
                     event::read()?
                 {
                     match key.code {
-                        /*
-                         * NEXT RANDOM
-                         *
-                         * Выходим из внутреннего
-                         * цикла и делаем НОВЫЙ
-                         * запрос к API.
-                         */
                         KeyCode::Char('n')
                         | KeyCode::Char('N')
                         | KeyCode::Right => {
@@ -506,11 +456,6 @@ async fn run_random_app(
 }
 
 
-/*
- * ─────────────────────────────────────
- * RANDOM API REQUEST
- * ─────────────────────────────────────
- */
 
 async fn fetch_random_wallpaper(
     config: &WallyConfig,
@@ -555,11 +500,6 @@ async fn fetch_random_wallpaper(
 }
 
 
-/*
- * ─────────────────────────────────────
- * RANDOM DOWNLOAD
- * ─────────────────────────────────────
- */
 
 async fn download_random_current(
     wallpaper: &Wallpaper,
@@ -616,11 +556,6 @@ async fn download_random_current(
 }
 
 
-/*
- * ─────────────────────────────────────
- * RANDOM SET WALLPAPER
- * ─────────────────────────────────────
- */
 
 async fn set_random_current(
     wallpaper: &Wallpaper,
@@ -694,9 +629,6 @@ pub async fn run(
     directory: String,
 ) -> Result<()> {
 
-    /*
-     * Определяем возможности терминала.
-     */
 
     let picker =
         Picker::from_query_stdio()
@@ -705,9 +637,6 @@ pub async fn run(
             )?;
 
 
-    /*
-     * Создаём image protocols.
-     */
 
     let protocols =
         images
@@ -755,9 +684,6 @@ pub async fn run(
         .await;
 
 
-    /*
-     * Восстанавливаем терминал.
-     */
 
     disable_raw_mode()?;
 
@@ -776,11 +702,6 @@ pub async fn run(
 }
 
 
-/*
- * ─────────────────────────────────────
- * MAIN LOOP
- * ─────────────────────────────────────
- */
 
 async fn run_app(
     terminal:
@@ -808,11 +729,6 @@ async fn run_app(
 
     loop {
 
-        /*
-         * ─────────────────────────
-         * DRAW
-         * ─────────────────────────
-         */
 
         terminal.draw(
             |frame| {
@@ -821,9 +737,6 @@ async fn run_app(
                     frame.area();
 
 
-                /*
-                 * Header / Image / Footer
-                 */
 
                 let chunks =
                     Layout::default()
@@ -838,11 +751,6 @@ async fn run_app(
                         .split(area);
 
 
-                /*
-                 * ─────────────────
-                 * HEADER
-                 * ─────────────────
-                 */
 
                 let position =
                     if app.wallpapers.is_empty() {
@@ -883,12 +791,6 @@ async fn run_app(
                     chunks[0],
                 );
 
-
-                /*
-                 * ─────────────────
-                 * IMAGE
-                 * ─────────────────
-                 */
 
                 let image_block =
                     Block::default()
@@ -933,11 +835,6 @@ async fn run_app(
                 }
 
 
-                /*
-                 * ─────────────────
-                 * FOOTER
-                 * ─────────────────
-                 */
 
                 let wallpaper =
                     app.current_wallpaper();
@@ -1021,11 +918,6 @@ async fn run_app(
         )?;
 
 
-        /*
-         * ─────────────────────────
-         * INPUT
-         * ─────────────────────────
-         */
 
         if event::poll(
             std::time::Duration::from_millis(
@@ -1130,7 +1022,7 @@ async fn run_app(
                     }
 
 
-                    /*
+                    /*Q
                      * QUIT
                      */
 
@@ -1158,11 +1050,6 @@ async fn run_app(
 }
 
 
-/*
- * ─────────────────────────────────────
- * DOWNLOAD SELECTED
- * ─────────────────────────────────────
- */
 
 async fn download_selected(
     app: &App,
@@ -1270,11 +1157,6 @@ async fn download_selected(
 }
 
 
-/*
- * ─────────────────────────────────────
- * DOWNLOAD CURRENT
- * ─────────────────────────────────────
- */
 
 async fn download_current(
     app: &App,
@@ -1364,9 +1246,6 @@ async fn download_current(
         .ok();
 
 
-    /*
-     * Возвращаем TUI.
-     */
 
     enable_raw_mode()?;
 
@@ -1382,11 +1261,6 @@ async fn download_current(
 }
 
 
-/*
- * ─────────────────────────────────────
- * SET CURRENT WALLPAPER
- * ─────────────────────────────────────
- */
 
 async fn set_current_wallpaper(
     app: &App,
@@ -1445,9 +1319,6 @@ async fn set_current_wallpaper(
     println!();
 
 
-    /*
-     * Сначала скачиваем оригинал.
-     */
 
     println!("⬇ Downloading wallpaper...");
 
@@ -1462,10 +1333,6 @@ async fn set_current_wallpaper(
     println!();
 
 
-    /*
-     * Передаём локальный файл
-     * в wallpaper backend.
-     */
 
     println!("🖥 Setting wallpaper...");
 
@@ -1497,9 +1364,6 @@ async fn set_current_wallpaper(
         .ok();
 
 
-    /*
-     * Возвращаем TUI.
-     */
 
     enable_raw_mode()?;
 

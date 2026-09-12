@@ -133,9 +133,7 @@ pub async fn download_wallpaper(
         directory.join(filename);
 
 
-    /*
-     * CACHE
-     */
+
 
     if fs::try_exists(&path)
         .await

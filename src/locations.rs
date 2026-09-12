@@ -45,23 +45,12 @@ pub fn save(location: &str) {
 
     let mut locations = load();
 
-    /*
-     * Если такая папка уже есть —
-     * убираем старую запись.
-     */
 
     locations.retain(|item| item != location);
 
-    /*
-     * Новая папка становится первой.
-     */
 
     locations.insert(0, location.to_string());
 
-    /*
-     * Ограничиваем количество сохранённых
-     * местоположений.
-     */
 
     locations.truncate(MAX_LOCATIONS);
 
