@@ -1,7 +1,6 @@
 #!/bin/sh
 set -eu
 
-# Change this to your GitHub repository: owner/repository
 REPO="${WALLY_REPO:-Dseelis/wally}"
 VERSION="${WALLY_VERSION:-latest}"
 INSTALL_DIR="${WALLY_INSTALL_DIR:-$HOME/.local/bin}"
@@ -17,10 +16,12 @@ die() {
 
 command -v curl >/dev/null 2>&1 || die "curl is required."
 command -v tar >/dev/null 2>&1 || die "tar is required."
+command -v install >/dev/null 2>&1 || die "install is required."
 
 [ "$(uname -s)" = "Linux" ] || die "Wally currently provides Linux binaries."
 
 ARCH="$(uname -m)"
+
 case "$ARCH" in
     x86_64|amd64)
         ARCH="x86_64"
@@ -43,31 +44,47 @@ else
 fi
 
 TMP_DIR="$(mktemp -d)"
-trap 'rm -rf "$TMP_DIR"' EXIT
-
+EXTRACT_DIR="$TMP_DIR/extracted"
 ARCHIVE="$TMP_DIR/$ASSET"
+
+cleanup() {
+    rm -rf "$TMP_DIR"
+}
+
+trap cleanup EXIT INT TERM
 
 log "Installing Wally..."
 log "Repository: $REPO"
 log "Architecture: $ARCH"
 log "Download: $URL"
+log ""
+
+mkdir -p "$EXTRACT_DIR"
 
 if ! curl -fL --retry 3 --progress-bar "$URL" -o "$ARCHIVE"; then
     die "Could not download Wally. Check that the GitHub Release and asset exist."
 fi
 
-mkdir -p "$INSTALL_DIR"
+log ""
+log "Extracting Wally..."
 
-tar -xzf "$ARCHIVE" -C "$TMP_DIR"
+if ! tar -xzf "$ARCHIVE" -C "$EXTRACT_DIR"; then
+    die "Could not extract the release archive."
+fi
 
-if [ ! -f "$TMP_DIR/wally" ]; then
+BINARY="$(find "$EXTRACT_DIR" -type f -name "wally" -print -quit)"
+
+if [ -z "$BINARY" ]; then
     die "The release archive does not contain a 'wally' binary."
 fi
 
-install -Dm755 "$TMP_DIR/wally" "$INSTALL_DIR/wally"
+mkdir -p "$INSTALL_DIR"
+
+install -Dm755 "$BINARY" "$INSTALL_DIR/wally"
 
 log ""
-log "✓ Wally installed to: $INSTALL_DIR/wally"
+log "✓ Wally installed successfully!"
+log "✓ Location: $INSTALL_DIR/wally"
 
 case ":${PATH}:" in
     *:"$INSTALL_DIR":*)
@@ -75,15 +92,21 @@ case ":${PATH}:" in
         ;;
     *)
         log ""
-        log "Add Wally to PATH with:"
+        log "Wally was installed, but $INSTALL_DIR is not in your PATH."
+        log ""
+        log "Run:"
         log ""
         log "  export PATH=\"\$HOME/.local/bin:\$PATH\""
         log ""
-        log "For a permanent setup, add that line to ~/.bashrc or ~/.zshrc."
+        log "For a permanent setup, add this line to your shell config."
         ;;
 esac
 
-if command -v "$INSTALL_DIR/wally" >/dev/null 2>&1; then
+if [ -x "$INSTALL_DIR/wally" ]; then
     log ""
+    log "Version:"
     "$INSTALL_DIR/wally" --version 2>/dev/null || true
 fi
+
+log ""
+log "Enjoy Wally! 🖼️"
